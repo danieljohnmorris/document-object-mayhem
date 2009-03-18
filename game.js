@@ -6,6 +6,8 @@ function Game(turns, players){
 	// ONLY PRIVELEGED METHODS MAY VIEW/EDIT/INVOKE 
 	// *********************************************************************** 
 
+	//create a global [within this scope] reference to this
+	var self = this;
     
 	//var alive=true, age=1;
 	//var maxAge=70+Math.round(Math.random()*15)+Math.round(Math.random()*15);
@@ -27,7 +29,7 @@ function Game(turns, players){
 	this.total_players = function() {
 	    return players.length;
     }
-
+  
 	this.active_players = function() {
 	    var dead_players = 0;
 	    players.each(function() {
@@ -46,18 +48,26 @@ function Game(turns, players){
     }
 
     this.do_turn = function() {
-        if (!this.has_ended()) {
-            log("turn #" + this.current_turn);
+        if (this.has_ended()) {
             clearInterval(this.tick);
-        }
-        this.next_turn();
+			this.end();
+        } else {
+            log("turn #" + this.current_turn);
+	        this.next_turn();
+		}
     }
 
     this.start = function() {
-        log("game started!");        
-        this.tick = setInterval("do_turn()", 1000);
+        log("game started!");
+		this.tick = window.setInterval(function() { 
+	        self.do_turn();
+		}, 1000);
     }
 
+    this.end = function() {
+        log("game ended!");
+	}
+	
 	//this.toString=this.getName=function(){ return myName } 
 
 	//this.eat=function(){ 
@@ -89,7 +99,7 @@ function Game(turns, players){
 
 	//this.clothing="nothing/naked";
 	//this.dirtFactor=0;
-} 
+};
 
 
 // ************************************************************************ 
@@ -114,4 +124,3 @@ function Game(turns, players){
 // ************************************************************************ 
 
 //Game.current_turn = 0;
-
