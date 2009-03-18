@@ -1,4 +1,4 @@
-function Game(turns, players){ 
+function Game(turns, players, interval){ 
 	//this.constructor.current_turn++;
 
 	// ************************************************************************ 
@@ -61,7 +61,7 @@ function Game(turns, players){
         log("game started!");
 		this.tick = window.setInterval(function() { 
 	        self.do_turn();
-		}, 1000);
+		}, this.turn_interval);
     }
 
     this.end = function() {
@@ -92,8 +92,9 @@ function Game(turns, players){
 	// PUBLIC PROPERTIES -- ANYONE MAY READ/WRITE 
 	// ************************************************************************ 
 
+   	this.turn_interval = interval ? interval : 500;
     this.total_turns = turns ? turns : 10;
-    this.current_turn = 1;
+   	this.current_turn = 1;
     this.players = players;
     this.tick = null;
 
