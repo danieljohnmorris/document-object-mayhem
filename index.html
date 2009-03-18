@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Document Object MAYHEM!</title>
+	
+	<script type="text/javascript" src="http://www.bbc.co.uk/glow/gloader.js"></script>
+	<script type="text/javascript">
+	  gloader.load(["glow", "1", "glow.anim", "glow.net", "glow.dom"]);
+	</script>
+
+	<script type="text/javascript" src="Game.js"></script>
+	<script type="text/javascript" src="domayhem.js"></script>
+
+	<script type="text/javascript">
+
+	var turn_number = 1; 	// counter
+	var turn_delay = 1000; 	// milliseconds
+	var varience = 10; 		// %
+
+	glow.onDomReady(function() {
+		deathmatch = new Game(3, glow.dom.get(".player"));
+		
+		update_setting("game--turn-number", 		turn_number);
+		update_setting("game--turn-delay", 			turn_delay);
+		update_setting("game--total-players", 		deathmatch.total_players());
+		update_setting("game--active-players", 		deathmatch.active_players());
+		update_setting("game--varience-percent", 	varience);
+		
+		// setup players
+		glow.dom.get(".player").each(function() {
+		
+		});
+		
+		deathmatch.start();
+	});
+			
+	</script>	
+	<style>
+	.player { border: 1px solid red; padding: 5px; margin: 10px; float: left; }
+	.ammo { border: 1px solid red; padding: 5px; margin: 10px; }
+	#log { position: absolute; right: 0px; width: 300px; padding: 10px; border: 1px solid #aaa; color: #777; }
+	h1, h2 { margin: 0; }
+	</style>
+</head>
+<body>
+
+<div class="settings">
+	<h1>Document Object MAYHEM!</h1>
+	<div>turn number: <span id="game--turn-number">?</span></div>
+	<div>turn delay: <span id="game--turn-delay">?</span> milliseconds</div>
+	<div>total players: <span id="game--total-players">?</span></div>
+	<div>active players: <span id="game--active-players">?</span></div>
+	<div>varience: <span id="game--varience-percent">?</span>%</div>
+</div>
+
+<div id="log">
+	logs....
+</div>
+
+<div id="dinosaur" class="player">
+	<h2>Player #1</h2>
+	<div class="settings">
+		<div>active: <span id="player--active">?</span></div>
+		<div>total ammo: <span id="player--total-ammo">?</span></div>
+		<div>turn ammo: <span id="player--turn-ammo">?</span></div>
+		<div>life total: <span id="player--life-total">?</span></div>
+		<div>life left: <span id="player--life-left">?</span></div>
+		<div>life percent: <span id="player--life-percent">?</span>%</div>
+	</div>
+	<div class="ammo-case ammo-type-1">
+		<div class="ammo">one</div>
+		<div class="ammo">two</div>
+		<div class="ammo">three</div>
+		<div class="ammo">four</div>
+	</div>
+</div>
+
+<div id="robot" class="player">
+	<h2>Player #2</h2>
+	<div class="settings">
+		<div>active: <span id="player--active">?</span></div>
+		<div>total ammo: <span id="player--total-ammo">?</span></div>
+		<div>turn ammo: <span id="player--turn-ammo">?</span></div>
+		<div>life total: <span id="player--life-total">?</span></div>
+		<div>life left: <span id="player--life-left">?</span></div>
+		<div>life percent: <span id="player--life-percent">?</span>%</div>
+	</div>
+	<div class="ammo-case ammo-type-3">
+		<div class="ammo">five</div>
+		<div class="ammo">six</div>
+		<div class="ammo">seven</div>
+		<div class="ammo">eight</div>
+		<div class="ammo">nine</div>
+		<div class="ammo">ten</div>
+		<div class="ammo">eleven</div>
+		<div class="ammo">twelve</div>
+		<div class="ammo">thirteen</div>
+		<div class="ammo">fourteen</div>
+		<div class="ammo">fifteen</div>
+		<div class="ammo">sixteen</div>
+		<div class="ammo">seventeen</div>
+		<div class="ammo">eighteen</div>
+		<div class="ammo">nineteen</div>
+		<div class="ammo">twenty</div>
+	</div>
+</div>
+
+<div id="zombie" class="player">
+	<h2>Player #3</h2>
+	<div class="settings">
+		<div>active: <span id="player--active">?</span></div>
+		<div>total ammo: <span id="player--total-ammo">?</span></div>
+		<div>turn ammo: <span id="player--turn-ammo">?</span></div>
+		<div>life total: <span id="player--life-total">?</span></div>
+		<div>life left: <span id="player--life-left">?</span></div>
+		<div>life percent: <span id="player--life-percent">?</span>%</div>
+	</div>
+	<div class="ammo-case ammo-type-2">
+		<div class="ammo">twenty one</div>
+	</div>
+</div>
+
+</body>
+</html>
