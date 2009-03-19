@@ -1,4 +1,4 @@
-function Game(turns, players, interval, varience){ 
+function Game(turns, players, turn_interval, varience){ 
 	//this.constructor.awesomeness++;
 
 	// ************************************************************************ 
@@ -75,7 +75,7 @@ function Game(turns, players, interval, varience){
 	// PUBLIC PROPERTIES -- ANYONE MAY READ/WRITE 
 	// ************************************************************************ 
 
-   	this.turn_interval = interval ? interval : 500;
+   	this.turn_interval = turn_interval ? turn_interval : 500;
     this.total_turns = turns ? turns : 10;
    	this.current_turn = 1;
     this.players = players;
