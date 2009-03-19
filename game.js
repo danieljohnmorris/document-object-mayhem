@@ -1,4 +1,4 @@
-function Game(turns, players, turnInterval, actionInterval, varience){ 
+function Game(turns, players, turnInterval, actionInterval, varience, playerTotalLife){ 
 	//this.constructor.awesomeness++;
 
 	// ************************************************************************ 
@@ -28,11 +28,10 @@ function Game(turns, players, turnInterval, actionInterval, varience){
   
 	this.activePlayers = function() {
 	    var deadPlayers = 0;
-	    this.players.each(function() {
-		    //if (glow.dom.get(this.toDom).hasClass("dead"))
-		    if (glow.dom.get(this).hasClass("dead"))
-		        deadPlayers++;
-		});
+        for (var i = 0; i < this.players.length; i++) {
+            if (this.players[i].isDead())
+	            deadPlayers++;
+        }
 	    return this.totalPlayers() - deadPlayers;
     }
 
@@ -52,11 +51,20 @@ function Game(turns, players, turnInterval, actionInterval, varience){
             updateSetting("game--turn-number", this.currentTurn);
             log("turn #" + this.currentTurn);
 
+            this.players[this.currentTurn-1].kill();
+
     		updateSetting("game--active-players", this.activePlayers());
 	        this.nextTurn();
 		}
     }
 
+    this.init = function() {
+        for (var i = 0; i < this.playersDom.length; i++) {
+            this.players[i] = new Player(this.playersDom[i], varience, playerTotalLife);
+            this.players[i].init();
+        }
+    }
+    
     this.start = function() {
 		updateSetting("game--turn-delay", this.turnInterval);
 		updateSetting("game--action-delay", this.actionInterval);
@@ -87,8 +95,8 @@ function Game(turns, players, turnInterval, actionInterval, varience){
    	this.turnInterval = turnInterval ? turnInterval : 600;
     this.totalTurns = turns ? turns : 10;
    	this.currentTurn = 1;
-    this.players_dom = players;
-    this.players = players;
+    this.playersDom = players;
+    this.players = Array();
     this.varience = varience;
 
 	//this.attribute = "some-default";

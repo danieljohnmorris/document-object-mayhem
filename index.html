@@ -17,12 +17,14 @@
 	<script type="text/javascript">
 
 	var totalTurns = 3;
-	var turnDelay = 500; 	// milliseconds
-	var actionDelay = 100; 	// milliseconds
-	var varience = 10; 		// %
+	var turnDelay = 500; 		// milliseconds
+	var actionDelay = 100; 		// milliseconds
+	var varience = 10; 			// %
+	var playerTotalLife = 110; 	// milliseconds
 
 	glow.onDomReady(function() {
-		deathmatch = new Game(totalTurns, glow.dom.get(".player"), turnDelay, actionDelay, varience);		
+		deathmatch = new Game(totalTurns, glow.dom.get(".player"), turnDelay, actionDelay, varience, playerTotalLife);
+		deathmatch.init();
 		deathmatch.start();
 	});
 			
@@ -57,7 +59,7 @@
 <div id="player-one" class="player">
 	<h2>Player #1</h2>
 	<div class="settings">
-		<div>active: <span id="player--active">?</span></div>
+		<div>dead: <span id="player--dead">?</span></div>
 		<div>total ammo: <span id="player--total-ammo">?</span></div>
 		<div>turn ammo: <span id="player--turn-ammo">?</span></div>
 		<div>life total: <span id="player--life-total">?</span></div>
@@ -75,7 +77,7 @@
 <div id="player-two" class="player">
 	<h2>Player #2</h2>
 	<div class="settings">
-		<div>active: <span id="player--active">?</span></div>
+		<div>dead: <span id="player--dead">?</span></div>
 		<div>total ammo: <span id="player--total-ammo">?</span></div>
 		<div>turn ammo: <span id="player--turn-ammo">?</span></div>
 		<div>life total: <span id="player--life-total">?</span></div>
@@ -105,7 +107,7 @@
 <div id="player-three" class="player">
 	<h2>Player #3</h2>
 	<div class="settings">
-		<div>active: <span id="player--active">?</span></div>
+		<div>dead: <span id="player--dead">?</span></div>
 		<div>total ammo: <span id="player--total-ammo">?</span></div>
 		<div>turn ammo: <span id="player--turn-ammo">?</span></div>
 		<div>life total: <span id="player--life-total">?</span></div>
