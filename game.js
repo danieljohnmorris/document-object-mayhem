@@ -6,6 +6,9 @@ function Game(turns, players){
 	// ONLY PRIVELEGED METHODS MAY VIEW/EDIT/INVOKE 
 	// *********************************************************************** 
 
+	//create a global [within this scope] reference to this
+	var self = this;
+
 	//var myName=n?n:"John Doe";
 	//function makeOlder(){ return alive = (++age <= maxAge) } 
 
@@ -22,7 +25,7 @@ function Game(turns, players){
 	this.total_players = function() {
 	    return players.length;
     }
-
+  
 	this.active_players = function() {
 	    var dead_players = 0;
 	    players.each(function() {
@@ -41,18 +44,26 @@ function Game(turns, players){
     }
 
     this.do_turn = function() {
-        if (!this.has_ended()) {
-            log("turn #" + this.current_turn);
+        if (this.has_ended()) {
             clearInterval(this.tick);
-        }
-        this.next_turn();
+			this.end();
+        } else {
+            log("turn #" + this.current_turn);
+	        this.next_turn();
+		}
     }
 
     this.start = function() {
-        log("game started!");        
-        this.tick = setInterval("do_turn()", 1000);
+        log("game started!");
+		this.tick = window.setInterval(function() { 
+	        self.do_turn();
+		}, this.turn_interval);
     }
 
+    this.end = function() {
+        log("game ended!");
+	}
+	
 	//this.toString=this.getName=function(){ return myName } 
 
 	//this.eat=function(){ 
@@ -62,14 +73,14 @@ function Game(turns, players){
 	// PUBLIC PROPERTIES -- ANYONE MAY READ/WRITE 
 	// ************************************************************************ 
 
+   	this.turn_interval = interval ? interval : 500;
     this.total_turns = turns ? turns : 10;
-    this.current_turn = 1;
+   	this.current_turn = 1;
     this.players = players;
     this.tick = null;
 
 	//this.attribute = "some-default";
-} 
-
+};
 
 // ************************************************************************ 
 // PUBLIC METHODS -- ANYONE MAY READ/WRITE 
@@ -90,4 +101,3 @@ function Game(turns, players){
 // ************************************************************************ 
 
 //Thing.awesomeness = 0;
-
