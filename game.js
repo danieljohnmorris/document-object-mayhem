@@ -1,4 +1,4 @@
-function Game(turns, players, interval){ 
+function Game(turns, players, interval, varience){ 
 	//this.constructor.awesomeness++;
 
 	// ************************************************************************ 
@@ -77,6 +77,7 @@ function Game(turns, players, interval){
     this.total_turns = turns ? turns : 10;
    	this.current_turn = 1;
     this.players = players;
+    this.varience = varience;
     this.tick = null;
 
 	//this.attribute = "some-default";

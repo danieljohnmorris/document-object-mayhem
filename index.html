@@ -20,13 +20,13 @@
 	var varience = 10; 		// %
 
 	glow.onDomReady(function() {
-		deathmatch = new Game(3, glow.dom.get(".player"));
+		deathmatch = new Game(3, glow.dom.get(".player"), 1000, 10);
 		
 		update_setting("game--turn-number", 		turn_number);
 		update_setting("game--turn-delay", 			turn_delay);
 		update_setting("game--total-players", 		deathmatch.total_players());
 		update_setting("game--active-players", 		deathmatch.active_players());
-		update_setting("game--varience-percent", 	varience);
+		update_setting("game--varience-percent", 	deathmatch.varience);
 		
 		// setup players
 		glow.dom.get(".player").each(function() {
