@@ -49,14 +49,22 @@ function Game(turns, players, turnInterval, actionInterval, varience){
 			this.end();
         } else {
             updateSetting("game--turn-number", this.currentTurn);
-
             log("turn #" + this.currentTurn);
+
+    		updateSetting("game--active-players", this.active_players());
 	        this.nextTurn();
 		}
     }
 
     this.start = function() {
-        log("game started!");
+		updateSetting("game--turn-delay", this.turnInterval);
+		updateSetting("game--action-delay", this.actionInterval);
+		updateSetting("game--varience-percent", this.varience);
+
+        log("game started! (" + this.total_players() + " players)");
+		updateSetting("game--total-players", this.total_players());
+		updateSetting("game--active-players", this.active_players());
+
 		this.tick = window.setInterval(function() { 
 	        self.doTurn();
 		}, this.turnInterval);
