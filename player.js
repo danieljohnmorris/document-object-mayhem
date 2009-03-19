@@ -21,7 +21,7 @@ function Player(domObject, varience, totalLife, speechInterval){
 	this.init = function() {
 	    update("player--name", this.name, this.toDom);
 	    update("player--life-total", this.totalLife, this.toDom);
-        this.clearSay();
+        this.say("I'm alive!");
 	    this.updateDebug();
 	    this.log("was born ^_^");
     }

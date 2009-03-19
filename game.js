@@ -18,6 +18,13 @@ function Game(players, turns, turnInterval, actionInterval, speechInterval, vari
 	// MAY NOT BE CHANGED; MAY BE REPLACED WITH PUBLIC FLAVORS 
 	// ************************************************************************ 
 
+    this.init = function() {
+        for (var i = 0; i < this.playersDom.length; i++) {
+            this.players[i] = new Player(this.playersDom[i], varience, playerTotalLife, speechInterval);
+            this.players[i].init();
+        }
+    }
+    
 	this.nextTurn = function() {
         this.currentTurn++;
     }
@@ -61,13 +68,6 @@ function Game(players, turns, turnInterval, actionInterval, speechInterval, vari
     		update("game--active-players", this.activePlayers());
 	        this.nextTurn();
 		}
-    }
-
-    this.init = function() {
-        for (var i = 0; i < this.playersDom.length; i++) {
-            this.players[i] = new Player(this.playersDom[i], varience, playerTotalLife);
-            this.players[i].init();
-        }
     }
     
     this.start = function() {
