@@ -29,7 +29,8 @@ function Game(turns, players, turnInterval, actionInterval, varience){
 	this.activePlayers = function() {
 	    var deadPlayers = 0;
 	    this.players.each(function() {
-		    if (glow.dom.get(this.toDom).hasClass("dead"))
+		    //if (glow.dom.get(this.toDom).hasClass("dead"))
+		    if (glow.dom.get(this).hasClass("dead"))
 		        deadPlayers++;
 		});
 	    return this.totalPlayers() - deadPlayers;
@@ -86,13 +87,8 @@ function Game(turns, players, turnInterval, actionInterval, varience){
    	this.turnInterval = turnInterval ? turnInterval : 600;
     this.totalTurns = turns ? turns : 10;
    	this.currentTurn = 1;
-    this.players = function() {
-        var playerObjects = new Array();
-	    players.each(function() {
-	        playerObjects << new Player(player);
-		});        
-        return playerObjects;
-    };
+    this.players_dom = players;
+    this.players = players;
     this.varience = varience;
 
 	//this.attribute = "some-default";
