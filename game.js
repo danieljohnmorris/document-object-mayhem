@@ -80,7 +80,6 @@ function Game(turns, players, turn_interval, varience){
    	this.current_turn = 1;
     this.players = players;
     this.varience = varience;
-    this.tick = null;
 
 	//this.attribute = "some-default";
 };
