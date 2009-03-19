@@ -1,4 +1,4 @@
-function Game(turns, players){ 
+function Game(turns, players, interval){ 
 	//this.constructor.awesomeness++;
 
 	// ************************************************************************ 
