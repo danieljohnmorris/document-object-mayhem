@@ -51,7 +51,7 @@ function Game(turns, players, turnInterval, actionInterval, varience){
             updateSetting("game--turn-number", this.currentTurn);
             log("turn #" + this.currentTurn);
 
-    		updateSetting("game--active-players", this.active_players());
+    		updateSetting("game--active-players", this.activePlayers());
 	        this.nextTurn();
 		}
     }
@@ -61,9 +61,9 @@ function Game(turns, players, turnInterval, actionInterval, varience){
 		updateSetting("game--action-delay", this.actionInterval);
 		updateSetting("game--varience-percent", this.varience);
 
-        log("game started! (" + this.total_players() + " players)");
-		updateSetting("game--total-players", this.total_players());
-		updateSetting("game--active-players", this.active_players());
+        log("game started! (" + this.totalPlayers() + " players)");
+		updateSetting("game--total-players", this.totalPlayers());
+		updateSetting("game--active-players", this.activePlayers());
 
 		this.tick = window.setInterval(function() { 
 	        self.doTurn();
