@@ -48,6 +48,8 @@ function Game(turns, players, interval, varience){
             clearInterval(this.tick);
 			this.end();
         } else {
+            update_setting("game--turn-number", this.current_turn);
+
             log("turn #" + this.current_turn);
 	        this.next_turn();
 		}
