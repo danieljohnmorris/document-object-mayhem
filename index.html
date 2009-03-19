@@ -10,33 +10,31 @@
 	  gloader.load(["glow", "1", "glow.anim", "glow.net", "glow.dom"]);
 	</script>
 
-	<script type="text/javascript" src="game.js"></script>
 	<script type="text/javascript" src="domayhem.js"></script>
+	<script type="text/javascript" src="player.js"></script>
+	<script type="text/javascript" src="game.js"></script>
 
 	<script type="text/javascript">
 
-	var turn_number = 1; 	// counter
-	var turn_delay = 1000; 	// milliseconds
+	var totalTurns = 5; 	// milliseconds
+	var turnDelay = 1000; 	// milliseconds
+	var actionDelay = 100; 	// milliseconds
 	var varience = 10; 		// %
 
 	glow.onDomReady(function() {
-		deathmatch = new Game(3, glow.dom.get(".player"), 1000, 10);
+		deathmatch = new Game(totalTurns, glow.dom.get(".player"), turnDelay, actionDelay, varience);
 		
-		update_setting("game--turn-number", 		turn_number);
-		update_setting("game--turn-delay", 			turn_delay);
-		update_setting("game--total-players", 		deathmatch.total_players());
-		update_setting("game--active-players", 		deathmatch.active_players());
-		update_setting("game--varience-percent", 	deathmatch.varience);
-		
-		// setup players
-		glow.dom.get(".player").each(function() {
-		
-		});
+		updateSetting("game--turn-number", 			turn_number);
+		updateSetting("game--turn-delay", 			turn_delay);
+		updateSetting("game--total-players", 		deathmatch.total_players());
+		updateSetting("game--active-players", 		deathmatch.active_players());
+		updateSetting("game--varience-percent", 	deathmatch.varience);
 		
 		deathmatch.start();
 	});
 			
 	</script>	
+
 	<style>
 	.player { border: 1px solid red; padding: 5px; margin: 10px; float: left; }
 	.ammo { border: 1px solid red; padding: 5px; margin: 10px; }

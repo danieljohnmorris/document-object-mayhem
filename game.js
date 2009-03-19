@@ -1,4 +1,4 @@
-function Game(turns, players, turn_interval, varience){ 
+function Game(turns, players, turnInterval, actionInterval, varience){ 
 	//this.constructor.awesomeness++;
 
 	// ************************************************************************ 
@@ -18,48 +18,48 @@ function Game(turns, players, turn_interval, varience){
 	// MAY NOT BE CHANGED; MAY BE REPLACED WITH PUBLIC FLAVORS 
 	// ************************************************************************ 
 
-	this.next_turn = function() {
-        this.current_turn++;
+	this.nextTurn = function() {
+        this.currentTurn++;
     }
 
-	this.total_players = function() {
+	this.totalPlayers = function() {
 	    return players.length;
     }
   
-	this.active_players = function() {
-	    var dead_players = 0;
-	    players.each(function() {
-		    if (glow.dom.get(this).hasClass("dead"))
-		        dead_players++;
+	this.activePlayers = function() {
+	    var deadPlayers = 0;
+	    this.players.each(function() {
+		    if (glow.dom.get(this.toDom).hasClass("dead"))
+		        deadPlayers++;
 		});
-	    return this.total_players() - dead_players;
+	    return this.totalPlayers() - deadPlayers;
     }
 
-    this.has_ended = function() {
-        if (this.current_turn <= this.total_turns) {
+    this.hasEnded = function() {
+        if (this.currentTurn <= this.totalTurns) {
             return false;
         } else {
             return true;
         }        
     }
 
-    this.do_turn = function() {
-        if (this.has_ended()) {
+    this.doTurn = function() {
+        if (this.hasEnded()) {
             clearInterval(this.tick);
 			this.end();
         } else {
-            update_setting("game--turn-number", this.current_turn);
+            updateSetting("game--turn-number", this.currentTurn);
 
-            log("turn #" + this.current_turn);
-	        this.next_turn();
+            log("turn #" + this.currentTurn);
+	        this.nextTurn();
 		}
     }
 
     this.start = function() {
         log("game started!");
 		this.tick = window.setInterval(function() { 
-	        self.do_turn();
-		}, this.turn_interval);
+	        self.doTurn();
+		}, this.turnInterval);
     }
 
     this.end = function() {
@@ -67,7 +67,6 @@ function Game(turns, players, turn_interval, varience){
 	}
 	
 	//this.toString=this.getName=function(){ return myName } 
-
 	//this.eat=function(){ 
 	//} 
 
@@ -75,10 +74,17 @@ function Game(turns, players, turn_interval, varience){
 	// PUBLIC PROPERTIES -- ANYONE MAY READ/WRITE 
 	// ************************************************************************ 
 
-   	this.turn_interval = turn_interval ? turn_interval : 500;
-    this.total_turns = turns ? turns : 10;
-   	this.current_turn = 1;
-    this.players = players;
+   	this.actionInterval = actionInterval ? actionInterval : 100;
+   	this.turnInterval = turnInterval ? turnInterval : 600;
+    this.totalTurns = turns ? turns : 10;
+   	this.currentTurn = 1;
+    this.players = function() {
+        var playerObjects = new Array();
+	    players.each(function() {
+	        playerObjects << new Player(player);
+		});        
+        return playerObjects;
+    };
     this.varience = varience;
 
 	//this.attribute = "some-default";

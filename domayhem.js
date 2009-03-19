@@ -1,4 +1,4 @@
-function update_setting(key, value) {
+function updateSetting(key, value) {
 	glow.dom.get("#" + key).html(value);
 }
 
