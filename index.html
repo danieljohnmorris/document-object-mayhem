@@ -31,11 +31,18 @@
 	<style>
 	.player { border: 1px solid red; padding: 5px; margin: 10px; float: left; }
 	.ammo { border: 1px solid red; padding: 5px; margin: 10px; }
-	#log { position: absolute; right: 0px; width: 300px; padding: 10px; border: 1px solid #aaa; color: #777; }
+	#logs { font-size: 0.9em; position: absolute; right: 0px; width: 300px; padding: 10px; color: #777; font-family: courier;}
+	#logs h2 {  }
+	#log { padding: 10px; border: 1px solid #aaa; color: #777; }
 	h1, h2 { margin: 0; }
 	</style>
 </head>
 <body>
+
+<div id="logs">
+	<h2>Log:</h2>
+	<div id="log"></div>
+</div>
 
 <div class="settings">
 	<h1>Document Object MAYHEM!</h1>
@@ -46,8 +53,6 @@
 	<div>active players: <span id="game--active-players">?</span></div>
 	<div>varience: <span id="game--varience-percent">?</span>%</div>
 </div>
-
-<div id="log"></div>
 
 <div id="player-one" class="player">
 	<h2>Player #1</h2>
