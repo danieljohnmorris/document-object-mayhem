@@ -1,4 +1,4 @@
-function Game(turns, players, turnInterval, actionInterval, varience, playerTotalLife){ 
+function Game(players, turns, turnInterval, actionInterval, speechInterval, varience, playerTotalLife){ 
 	//this.constructor.awesomeness++;
 
 	// ************************************************************************ 
@@ -35,6 +35,10 @@ function Game(turns, players, turnInterval, actionInterval, varience, playerTota
 	    return this.totalPlayers() - deadPlayers;
     }
 
+    this.otherPlayers = function(player) {
+        return new Array();
+    }
+    
     this.hasEnded = function() {
         if (this.currentTurn <= this.totalTurns) {
             return false;
@@ -48,12 +52,13 @@ function Game(turns, players, turnInterval, actionInterval, varience, playerTota
             clearInterval(this.tick);
 			this.end();
         } else {
-            updateSetting("game--turn-number", this.currentTurn);
-            log("turn #" + this.currentTurn);
-
-            this.players[this.currentTurn-1].hurt(rand(0, 100));
-
-    		updateSetting("game--active-players", this.activePlayers());
+            update("game--turn-number", this.currentTurn);
+            log("turn #" + this.currentTurn + " <br/>");
+            
+            this.players[this.currentTurn-1].sayBattleCry();
+            this.players[this.currentTurn-1].hurt(rand(0, 140));
+            
+    		update("game--active-players", this.activePlayers());
 	        this.nextTurn();
 		}
     }
@@ -66,13 +71,13 @@ function Game(turns, players, turnInterval, actionInterval, varience, playerTota
     }
     
     this.start = function() {
-		updateSetting("game--turn-delay", this.turnInterval);
-		updateSetting("game--action-delay", this.actionInterval);
-		updateSetting("game--varience-percent", this.varience);
+		update("game--turn-delay", this.turnInterval);
+		update("game--action-delay", this.actionInterval);
+		update("game--varience-percent", this.varience);
 
         log("game started! (" + this.totalPlayers() + " players)");
-		updateSetting("game--total-players", this.totalPlayers());
-		updateSetting("game--active-players", this.activePlayers());
+		update("game--total-players", this.totalPlayers());
+		update("game--active-players", this.activePlayers());
 
 		this.tick = window.setInterval(function() { 
 	        self.doTurn();
@@ -96,7 +101,7 @@ function Game(turns, players, turnInterval, actionInterval, varience, playerTota
     this.totalTurns = turns ? turns : 10;
    	this.currentTurn = 1;
     this.playersDom = players;
-    this.players = Array();
+    this.players = new Array();
     this.varience = varience;
 
 	//this.attribute = "some-default";

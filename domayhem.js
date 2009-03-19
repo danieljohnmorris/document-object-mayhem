@@ -1,4 +1,4 @@
-function updateSetting(key, value, dom) {
+function update(key, value, dom) {
     var parent = "";
     if (dom)
         parent = "#" + dom.id + " ";
