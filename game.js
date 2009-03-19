@@ -8,7 +8,7 @@ function Game(turns, players, turn_interval, varience){
 
 	//create a global [within this scope] reference to this
 	var self = this;
-
+    
 	//var myName=n?n:"John Doe";
 	//function makeOlder(){ return alive = (++age <= maxAge) } 
 
