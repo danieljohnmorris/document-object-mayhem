@@ -51,7 +51,7 @@ function Game(turns, players, turnInterval, actionInterval, varience, playerTota
             updateSetting("game--turn-number", this.currentTurn);
             log("turn #" + this.currentTurn);
 
-            this.players[this.currentTurn-1].kill();
+            this.players[this.currentTurn-1].hurt(rand(0, 100));
 
     		updateSetting("game--active-players", this.activePlayers());
 	        this.nextTurn();
