@@ -22,14 +22,7 @@
 	var varience = 10; 		// %
 
 	glow.onDomReady(function() {
-		deathmatch = new Game(totalTurns, glow.dom.get(".player"), turnDelay, actionDelay, varience);
-		
-		updateSetting("game--turn-number", 			turn_number);
-		updateSetting("game--turn-delay", 			turn_delay);
-		updateSetting("game--total-players", 		deathmatch.total_players());
-		updateSetting("game--active-players", 		deathmatch.active_players());
-		updateSetting("game--varience-percent", 	deathmatch.varience);
-		
+		deathmatch = new Game(totalTurns, glow.dom.get(".player"), turnDelay, actionDelay, varience);		
 		deathmatch.start();
 	});
 			
@@ -48,6 +41,7 @@
 	<h1>Document Object MAYHEM!</h1>
 	<div>turn number: <span id="game--turn-number">?</span></div>
 	<div>turn delay: <span id="game--turn-delay">?</span> milliseconds</div>
+	<div>action delay: <span id="game--action-delay">?</span> milliseconds</div>
 	<div>total players: <span id="game--total-players">?</span></div>
 	<div>active players: <span id="game--active-players">?</span></div>
 	<div>varience: <span id="game--varience-percent">?</span>%</div>
@@ -55,7 +49,7 @@
 
 <div id="log"></div>
 
-<div id="dinosaur" class="player">
+<div id="player-one" class="player">
 	<h2>Player #1</h2>
 	<div class="settings">
 		<div>active: <span id="player--active">?</span></div>
@@ -73,7 +67,7 @@
 	</div>
 </div>
 
-<div id="robot" class="player">
+<div id="player-two" class="player">
 	<h2>Player #2</h2>
 	<div class="settings">
 		<div>active: <span id="player--active">?</span></div>
@@ -103,7 +97,7 @@
 	</div>
 </div>
 
-<div id="zombie" class="player">
+<div id="player-three" class="player">
 	<h2>Player #3</h2>
 	<div class="settings">
 		<div>active: <span id="player--active">?</span></div>
