@@ -13,10 +13,6 @@ function Player(game, domObject, varience, totalLife, speechInterval){
 	// MAY BE INVOKED PUBLICLY AND MAY ACCESS PRIVATE ITEMS 
 	// MAY NOT BE CHANGED; MAY BE REPLACED WITH PUBLIC FLAVORS 
 	// ************************************************************************ 
-
-	this.log = function(message) {
-	    log(this.name + "> " + message);
-    }
     
 	this.init = function() {
 	    update("player--name", this.name, this.toDom);
@@ -24,6 +20,10 @@ function Player(game, domObject, varience, totalLife, speechInterval){
         this.say("I'm alive!");
 	    this.updateDebug();
 	    this.log("was born ^_^");
+    }
+
+	this.log = function(message) {
+	    log(this.name + "> " + message);
     }
 
 	this.updateDebug = function() {
@@ -54,9 +54,11 @@ function Player(game, domObject, varience, totalLife, speechInterval){
 	    }
     }
 	
-	this.attack = function(victim, damage) {        
+	this.attack = function(victim, damage) {
+	    this.game.clearSpeech();
         this.say("Attack!");
 	    this.log("attacks '" + victim.name + "' (" + damage + "dmg) ^_^");
+        
         victim.hurt(damage);
         this.damageInflicted += damage;
 	    this.updateDebug();        
@@ -64,6 +66,21 @@ function Player(game, domObject, varience, totalLife, speechInterval){
 
 	this.attackRandom = function(otherPlayers) {
 	    this.attack(otherPlayers[rand(0, otherPlayers.length-1)], rand(0, 130));
+    }
+
+    this.say = function(message) {
+//        clearInterval(this.speaking);
+        update("player--say", message, this.toDom);
+	    this.log("said \"" + message + "\" ^O^");
+
+//		this.speaking = window.setInterval(function() { 
+//	        self.clearSay();
+//		}, this.speechInterval);
+    }
+
+    this.clearSay = function() {
+        update("player--say", "", this.toDom);
+        clearInterval(this.speaking);
     }
 	
 	this.powerUp = function() {
@@ -76,6 +93,7 @@ function Player(game, domObject, varience, totalLife, speechInterval){
 	    this.active = false;
 	    log("<<< " + this.name);
 	    update("player--active", "NO", this.toDom);
+//        usleep(500000);
     }
     
 	this.isDead = function() {
@@ -93,22 +111,7 @@ function Player(game, domObject, varience, totalLife, speechInterval){
     this.sayBattleCry = function() {
         this.say(this.battleCry);
     }
-    
-    this.say = function(message) {
-        clearInterval(this.speaking);
-        update("player--say", message, this.toDom);
-	    this.log("said \"" + message + "\" ^O^");
         
-		this.speaking = window.setInterval(function() { 
-	        self.clearSay();
-		}, this.speechInterval);
-    }
-
-    this.clearSay = function() {
-        update("player--say", "", this.toDom);
-        clearInterval(this.speaking);
-    }
-    
     this.lifePercent = function() {
         return this.lifeLeft / this.totalLife * 100;
     }

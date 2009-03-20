@@ -17,11 +17,11 @@
 	<script type="text/javascript">
 
 	var totalTurns = 100;
+	var playerTotalLife = 300;
 	var turnDelay = 500; 		// milliseconds
 	var actionDelay = 100; 		// milliseconds
-	var speechDelay = 300; 		// milliseconds
+	var speechDelay = 900; 		// milliseconds
 	var varience = 10; 			// %
-	var playerTotalLife = 100; 	// milliseconds
 
 	glow.onDomReady(function() {
 		deathmatch = new Game(glow.dom.get(".player"), totalTurns, turnDelay, actionDelay, speechDelay, varience, playerTotalLife);

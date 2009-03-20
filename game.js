@@ -25,6 +25,81 @@ function Game(players, turns, turnInterval, actionInterval, speechInterval, vari
         }
     }
     
+    this.start = function() {
+		update("game--turn-delay", this.turnInterval);
+		update("game--action-delay", this.actionInterval);
+		update("game--speech-delay", speechInterval);
+		update("game--varience-percent", this.varience);
+
+        log("*** game started! (" + this.totalPlayers() + " players)");
+		update("game--total-players", this.totalPlayers());
+		update("game--active-players", this.alivePlayerCount());
+
+        for (var i = 0; i < this.totalTurns; i++) {
+            if (this.hasEnded()) {
+                break;
+            } else {
+	            self.doTurn();
+            }
+        }
+        this.end();
+    }
+
+    this.end = function() {
+        log("*** game ended!");
+        stillAlive = this.alivePlayers();
+
+        if (stillAlive.length < 1) {
+            log("*** No one won, everybody died.");
+        } else if (stillAlive.length < 2) {
+            log("*** Congrats '" + stillAlive[0].name + "', the sole survivor.");
+            stillAlive[0].say("I won!");
+        } else {
+            //find highest life left
+            var highScoreIndex = 0;
+            for (var i = 1; i < stillAlive.length; i++) {
+                if (stillAlive[i].score() > stillAlive[highScoreIndex].score()) {
+                    highScoreIndex = i;
+                }
+            }
+            
+            log("*** multiple survivors - Congrats '" + stillAlive[highScoreIndex].name + "'.");
+            stillAlive[highScoreIndex].say("I won!");
+        }
+	}
+	
+    this.hasEnded = function() {
+        if ((this.currentTurn <= this.totalTurns) && (this.alivePlayerCount() > 1)) {
+            return false;
+        } else {
+            return true;
+        }        
+    }
+
+    this.doTurn = function() {
+        update("game--turn-number", this.currentTurn);
+        log("*** turn #" + this.currentTurn);
+        
+        for (var i = 0; i < this.players.length; i++) {
+            var player = this.players[i];
+            if ((player.isDead()) || (this.otherPlayers(player).length == 0))
+                continue;
+
+            this.doPlayerTurn(i);
+        }
+            		
+		update("game--active-players", this.alivePlayerCount());
+        this.nextTurn();
+    }
+
+    this.doPlayerTurn = function(pl) {
+        var player = this.players[pl];
+        player.powerUp();
+//        alert("turn " + this.currentTurn + ") player: " + player.name);
+        player.attackRandom(this.otherPlayers(player));
+        player.standBy();
+    }
+
 	this.nextTurn = function() {
         this.currentTurn++;
     }
@@ -52,86 +127,12 @@ function Game(players, turns, turnInterval, actionInterval, speechInterval, vari
         }
     }
     
-    this.hasEnded = function() {
-        if ((this.currentTurn <= this.totalTurns) && (this.alivePlayerCount() > 1)) {
-            return false;
-        } else {
-            return true;
-        }        
-    }
-
-    this.doPlayerTurn = function(pl) {
-        var player = this.players[pl];
-        player.powerUp();
-        player.attackRandom(this.otherPlayers(player));
-        player.standBy();
-    }
-
     this.clearSpeech = function() {
         for (var i = 0; i < this.players.length; i++) {
             this.players[i].clearSay();
         }
     }
-
-    this.doTurn = function() {
-        if (this.hasEnded()) {
-            clearInterval(this.tick);
-			this.end();
-        } else {
-            update("game--turn-number", this.currentTurn);
-            log("*** turn #" + this.currentTurn);
-            
-            for (var i = 0; i < this.players.length; i++) {
-                var player = this.players[i];
-                if ((player.isDead()) || (this.otherPlayers(player).length == 0))
-                    continue;
-
-                this.doPlayerTurn(i);
-            }
-                		
-    		update("game--active-players", this.alivePlayerCount());
-	        this.nextTurn();
-		}
-    }
-    
-    this.start = function() {
-		update("game--turn-delay", this.turnInterval);
-		update("game--action-delay", this.actionInterval);
-		update("game--speech-delay", speechInterval);
-		update("game--varience-percent", this.varience);
-
-        log("*** game started! (" + this.totalPlayers() + " players)");
-		update("game--total-players", this.totalPlayers());
-		update("game--active-players", this.alivePlayerCount());
-
-		this.tick = window.setInterval(function() { 
-	        self.doTurn();
-		}, this.turnInterval);
-    }
-
-    this.end = function() {
-        log("*** game ended!");
-        stillAlive = this.alivePlayers();
-
-        if (stillAlive.length < 1) {
-            log("*** No one won, everybody died.");
-        } else if (stillAlive.length < 2) {
-            log("*** Congrats '" + stillAlive[0].name + "', the sole survivor.");
-            stillAlive[0].say("I won!");
-        } else {
-            //find highest life left
-            var highScoreIndex = 0;
-            for (var i = 1; i < stillAlive.length; i++) {
-                if (stillAlive[i].score() > stillAlive[highScoreIndex].score()) {
-                    highScoreIndex = i;
-                }
-            }
-            
-            log("*** multiple survivors - Congrats '" + stillAlive[highScoreIndex].name + "'.");
-            stillAlive[highScoreIndex].say("I won!");
-        }
-	}
-	
+    	
 	//this.toString=this.getName=function(){ return myName } 
 	//this.eat=function(){ 
 	//} 
