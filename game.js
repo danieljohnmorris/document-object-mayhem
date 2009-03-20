@@ -20,7 +20,7 @@ function Game(players, turns, turnInterval, actionInterval, speechInterval, vari
 
     this.init = function() {
         for (var i = 0; i < this.playersDom.length; i++) {
-            this.players[i] = new Player(this.playersDom[i], varience, playerTotalLife, speechInterval);
+            this.players[i] = new Player(this, this.playersDom[i], varience, playerTotalLife, speechInterval);
             this.players[i].init();
         }
     }
@@ -33,25 +33,44 @@ function Game(players, turns, turnInterval, actionInterval, speechInterval, vari
 	    return players.length;
     }
   
-	this.activePlayers = function() {
-	    var deadPlayers = 0;
+	this.alivePlayers = function() {
+        var alivePlayers = [];
         for (var i = 0; i < this.players.length; i++) {
-            if (this.players[i].isDead())
-	            deadPlayers++;
+            if (!this.players[i].isDead())
+                alivePlayers.push(this.players[i]);
         }
-	    return this.totalPlayers() - deadPlayers;
+	    return alivePlayers;
+    }    
+	this.alivePlayerCount = function() {
+        return this.alivePlayers().length;
     }
 
     this.otherPlayers = function(player) {
-        return new Array();
+        for (var i = 0; i < this.alivePlayers().length; i++) {
+            if (this.alivePlayers()[i].name == player.name)
+	            return removeElementFromArray(this.alivePlayers(), i);
+        }
     }
     
     this.hasEnded = function() {
-        if (this.currentTurn <= this.totalTurns) {
+        if ((this.currentTurn <= this.totalTurns) && (this.alivePlayerCount() > 1)) {
             return false;
         } else {
             return true;
         }        
+    }
+
+    this.doPlayerTurn = function(pl) {
+        var player = this.players[pl];
+        player.powerUp();
+        player.attackRandom(this.otherPlayers(player));
+        player.standBy();
+    }
+
+    this.clearSpeech = function() {
+        for (var i = 0; i < this.players.length; i++) {
+            this.players[i].clearSay();
+        }
     }
 
     this.doTurn = function() {
@@ -60,12 +79,17 @@ function Game(players, turns, turnInterval, actionInterval, speechInterval, vari
 			this.end();
         } else {
             update("game--turn-number", this.currentTurn);
-            log("turn #" + this.currentTurn + " <br/>");
+            log("*** turn #" + this.currentTurn);
             
-            this.players[this.currentTurn-1].sayBattleCry();
-            this.players[this.currentTurn-1].hurt(rand(0, 140));
-            
-    		update("game--active-players", this.activePlayers());
+            for (var i = 0; i < this.players.length; i++) {
+                var player = this.players[i];
+                if ((player.isDead()) || (this.otherPlayers(player).length == 0))
+                    continue;
+
+                this.doPlayerTurn(i);
+            }
+                		
+    		update("game--active-players", this.alivePlayerCount());
 	        this.nextTurn();
 		}
     }
@@ -73,11 +97,12 @@ function Game(players, turns, turnInterval, actionInterval, speechInterval, vari
     this.start = function() {
 		update("game--turn-delay", this.turnInterval);
 		update("game--action-delay", this.actionInterval);
+		update("game--speech-delay", speechInterval);
 		update("game--varience-percent", this.varience);
 
-        log("game started! (" + this.totalPlayers() + " players)");
+        log("*** game started! (" + this.totalPlayers() + " players)");
 		update("game--total-players", this.totalPlayers());
-		update("game--active-players", this.activePlayers());
+		update("game--active-players", this.alivePlayerCount());
 
 		this.tick = window.setInterval(function() { 
 	        self.doTurn();
@@ -85,7 +110,26 @@ function Game(players, turns, turnInterval, actionInterval, speechInterval, vari
     }
 
     this.end = function() {
-        log("game ended!");
+        log("*** game ended!");
+        stillAlive = this.alivePlayers();
+
+        if (stillAlive.length < 1) {
+            log("*** No one won, everybody died.");
+        } else if (stillAlive.length < 2) {
+            log("*** Congrats '" + stillAlive[0].name + "', the sole survivor.");
+            stillAlive[0].say("I won!");
+        } else {
+            //find highest life left
+            var highScoreIndex = 0;
+            for (var i = 1; i < stillAlive.length; i++) {
+                if (stillAlive[i].score() > stillAlive[highScoreIndex].score()) {
+                    highScoreIndex = i;
+                }
+            }
+            
+            log("*** multiple survivors - Congrats '" + stillAlive[highScoreIndex].name + "'.");
+            stillAlive[highScoreIndex].say("I won!");
+        }
 	}
 	
 	//this.toString=this.getName=function(){ return myName } 
@@ -101,7 +145,7 @@ function Game(players, turns, turnInterval, actionInterval, speechInterval, vari
     this.totalTurns = turns ? turns : 10;
    	this.currentTurn = 1;
     this.playersDom = players;
-    this.players = new Array();
+    this.players = [];
     this.varience = varience;
 
 	//this.attribute = "some-default";

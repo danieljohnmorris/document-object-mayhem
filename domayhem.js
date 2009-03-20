@@ -27,3 +27,27 @@ function rand( min, max ) {
     }
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+function removeElementFromArray(arr,i) {
+    var tempArr = [];
+    tempArr = tempArr.concat(arr);
+    tempArr.splice(i, 1);
+    return tempArr;
+}
+
+function debugPlayers(players) {
+    var o = "";
+    for (var i = 0; i < players.length; i++) {
+        o += players[i].name + " ";
+    }
+    log("debug> " + o);
+}
+
+function pause(numMilliseconds) { 
+    var now, goalTime; 
+    now = new Date(); 
+    goalTime = now.getTime() + numMilliseconds; 
+    while (now.getTime() < goalTime) { 
+        now = new Date(); 
+    } 
+} 

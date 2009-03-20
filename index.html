@@ -16,12 +16,12 @@
 
 	<script type="text/javascript">
 
-	var totalTurns = 3;
+	var totalTurns = 100;
 	var turnDelay = 500; 		// milliseconds
 	var actionDelay = 100; 		// milliseconds
-	var speechDelay = 900; 		// milliseconds
+	var speechDelay = 300; 		// milliseconds
 	var varience = 10; 			// %
-	var playerTotalLife = 110; 	// milliseconds
+	var playerTotalLife = 100; 	// milliseconds
 
 	glow.onDomReady(function() {
 		deathmatch = new Game(glow.dom.get(".player"), totalTurns, turnDelay, actionDelay, speechDelay, varience, playerTotalLife);
@@ -53,6 +53,7 @@
 	<div>turn number: <span id="game--turn-number">?</span></div>
 	<div>turn delay: <span id="game--turn-delay">?</span> milliseconds</div>
 	<div>action delay: <span id="game--action-delay">?</span> milliseconds</div>
+	<div>speech delay: <span id="game--speech-delay">?</span> milliseconds</div>
 	<div>total players: <span id="game--total-players">?</span></div>
 	<div>active players: <span id="game--active-players">?</span></div>
 	<div>varience: <span id="game--varience-percent">?</span>%</div>
@@ -64,11 +65,14 @@
 	<div class="settings">
 		<div>battlecry: <span id="player--battlecry">Fuck yeah!</span></div>
 		<div>dead: <span id="player--dead">?</span></div>
+		<div>selected: <span id="player--active">?</span></div>
 		<div>total ammo: <span id="player--total-ammo">?</span></div>
 		<div>turn ammo: <span id="player--turn-ammo">?</span></div>
 		<div>life total: <span id="player--life-total">?</span></div>
 		<div>life left: <span id="player--life-left">?</span></div>
 		<div>life percent: <span id="player--life-percent">?</span>%</div>
+		<div>damage inflicted: <span id="player--damage-inflicted">?</span></div>
+		<div>score: <span id="player--score">?</span></div>
 	</div>
 	<div class="ammo-case ammo-type-1">
 		<div class="ammo">one</div>
@@ -84,11 +88,14 @@
 	<div class="settings">
 		<div>battlecry: <span id="player--battlecry">I want biscuits!</span></div>
 		<div>dead: <span id="player--dead">?</span></div>
+		<div>selected: <span id="player--active">?</span></div>
 		<div>total ammo: <span id="player--total-ammo">?</span></div>
 		<div>turn ammo: <span id="player--turn-ammo">?</span></div>
 		<div>life total: <span id="player--life-total">?</span></div>
 		<div>life left: <span id="player--life-left">?</span></div>
 		<div>life percent: <span id="player--life-percent">?</span>%</div>
+		<div>damage inflicted: <span id="player--damage-inflicted">?</span></div>
+		<div>score: <span id="player--score">?</span></div>
 	</div>
 	<div class="ammo-case ammo-type-3">
 		<div class="ammo">five</div>
@@ -116,11 +123,14 @@
 	<div class="settings">
 		<div>battlecry: <span id="player--battlecry">RAAWK!</span></div>
 		<div>dead: <span id="player--dead">?</span></div>
+		<div>selected: <span id="player--active">?</span></div>
 		<div>total ammo: <span id="player--total-ammo">?</span></div>
 		<div>turn ammo: <span id="player--turn-ammo">?</span></div>
 		<div>life total: <span id="player--life-total">?</span></div>
 		<div>life left: <span id="player--life-left">?</span></div>
 		<div>life percent: <span id="player--life-percent">?</span>%</div>
+		<div>damage inflicted: <span id="player--damage-inflicted">?</span></div>
+		<div>score: <span id="player--score">?</span></div>
 	</div>
 	<div class="ammo-case ammo-type-2">
 		<div class="ammo">twenty one</div>

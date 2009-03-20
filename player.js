@@ -1,4 +1,4 @@
-function Player(domObject, varience, totalLife, speechInterval){ 
+function Player(game, domObject, varience, totalLife, speechInterval){ 
     
 	// ************************************************************************ 
 	// PRIVATE VARIABLES AND FUNCTIONS 
@@ -30,14 +30,16 @@ function Player(domObject, varience, totalLife, speechInterval){
 	    update("player--dead", this.isDead(), this.toDom);
 	    update("player--life-left", this.lifeLeft, this.toDom);
 	    update("player--life-percent", this.lifePercent(), this.toDom);
+	    update("player--damage-inflicted", this.damageInflicted, this.toDom);
+	    update("player--score", this.score(), this.toDom);
     }
 
 	this.die = function() {
-	    this.lifeLeft = 0;
-	    
+        this.say("I die!");
+
+	    this.lifeLeft = 0;	    
 	    this.updateDebug();
 	    this.log("died X_X");
-        this.say("I die!");
     }
     
     this.hurt = function(damage) {
@@ -52,12 +54,30 @@ function Player(domObject, varience, totalLife, speechInterval){
 	    }
     }
 	
-	this.attack = function(victim, damage) {
-        this.sayBattleCry();
-        victim.hurt(damage);
+	this.attack = function(victim, damage) {        
+        this.say("Attack!");
 	    this.log("attacks '" + victim.name + "' (" + damage + "dmg) ^_^");
+        victim.hurt(damage);
+        this.damageInflicted += damage;
+	    this.updateDebug();        
+    }
+
+	this.attackRandom = function(otherPlayers) {
+	    this.attack(otherPlayers[rand(0, otherPlayers.length-1)], rand(0, 130));
     }
 	
+	this.powerUp = function() {
+	    this.active = true;
+	    log(">>> " + this.name);
+	    update("player--active", "YES", this.toDom);
+    }
+    
+	this.standBy = function() {
+	    this.active = false;
+	    log("<<< " + this.name);
+	    update("player--active", "NO", this.toDom);
+    }
+    
 	this.isDead = function() {
 	    if (this.lifeLeft <= 0) {
 	        return true;
@@ -66,6 +86,10 @@ function Player(domObject, varience, totalLife, speechInterval){
 	    }
     }
 
+	this.score = function() {
+        return this.damageInflicted * this.lifePercent();
+    }
+    
     this.sayBattleCry = function() {
         this.say(this.battleCry);
     }
@@ -84,7 +108,7 @@ function Player(domObject, varience, totalLife, speechInterval){
         update("player--say", "", this.toDom);
         clearInterval(this.speaking);
     }
-
+    
     this.lifePercent = function() {
         return this.lifeLeft / this.totalLife * 100;
     }
@@ -93,9 +117,12 @@ function Player(domObject, varience, totalLife, speechInterval){
 	// PUBLIC PROPERTIES -- ANYONE MAY READ/WRITE 
 	// ************************************************************************ 
 
+   	this.game = game;
+   	this.toDom = domObject ? domObject : null;
    	this.name = domObject ? domObject.id : "Untitled";
    	this.battleCry = glow.dom.get("#" + this.name + " #player--battlecry").html();
-   	this.toDom = domObject ? domObject : null;
+   	this.damageInflicted = 0;
+   	this.active = false;
    	this.totalLife = totalLife ? totalLife : 100
    	this.lifeLeft = totalLife ? totalLife : 100
    	this.varience = varience ? varience : 10;  //%
