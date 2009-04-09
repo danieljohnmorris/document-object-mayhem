@@ -77,7 +77,7 @@ function getWindowDimensions() {
 function shoot(ammoId, targetId, targetPlayer) {
 	var ammoGlow = glow.dom.get("#" + ammoId);
 	var targetGlow = glow.dom.get("#" + targetId);
-	var myAnim = new glow.anim.Animation(100, {tween:glow.tweens.linear()});
+	var myAnim = new glow.anim.Animation(10, {tween:glow.tweens.easeIn()});
 
 	glow.events.addListener(myAnim, "frame", function() {
 		// get elements
@@ -97,7 +97,7 @@ function shoot(ammoId, targetId, targetPlayer) {
 
 			// width
 			var xStart = ammo.offsetLeft;
-			var xStop = 2000;
+			var xStop = windowDimensions.x + 200;
 			var xChange = xStop - xStart;
 
 			var targetX = target.offsetLeft;
