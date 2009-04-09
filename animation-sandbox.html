@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<script type="text/javascript" src="http://www.bbc.co.uk/glow/gloader.js"></script>
+<script type="text/javascript">
+  gloader.load(["glow", "1", "glow.dom", "glow.anim", "glow.tweens", "glow.data"]);
+</script>
+
+<style>
+
+#ammo-case li {
+    width: 200px;
+    height: 60px;
+    background-color: red;
+    z-index: 100;
+}
+
+.player {
+    width: 200px;
+    height: 200px;
+    background-color:green;
+    position: absolute;
+    right: 100px;
+    color: #fff;
+    border:2px solid white;
+}
+
+body {
+	overflow: hidden;
+}
+</style>
+
+<script type="text/javascript">
+
+Array.prototype.contains = function (element) {
+	for (var i = 0; i < this.length; i++) {
+		if (this[i] == element) {
+			return true;
+		}
+	}
+	return false;
+};
+
+function attack(ammoList, targetId, targetPlayer) {
+	targetPlayerHotspot = glow.events.addListener(targetPlayer, "hit", function(event) {
+		player = event.attachedTo;
+		player.hit(event.ammoId, event.damage);
+	});
+
+	shoot(ammoList[0].id, targetId, targetPlayer);
+
+	if (ammoList.length > 1)
+		setTimeout(function() {
+		attack(ammoList.slice(1), targetId, targetPlayer)
+	}, 300);
+}
+
+function getWindowDimensions() {
+	var windowWidth = 0, windowHeight = 0;
+	if( typeof( window.innerWidth ) == 'number' ) {
+		//Non-IE
+		windowWidth = window.innerWidth;
+		windowHeight = window.innerHeight;
+	} else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight )) {
+		//IE 6+ in 'standards compliant mode'
+		windowWidth = document.documentElement.clientWidth;
+		windowHeight = document.documentElement.clientHeight;
+	} else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+		//IE 4 compatible
+		windowWidth = document.body.clientWidth;
+		windowHeight = document.body.clientHeight;
+	}
+	return {x:windowWidth, y:windowHeight};
+}
+
+function shoot(ammoId, targetId, targetPlayer) {
+	var ammoGlow = glow.dom.get("#" + ammoId);
+	var targetGlow = glow.dom.get("#" + targetId);
+	var myAnim = new glow.anim.Animation(100, {tween:glow.tweens.linear()});
+
+	glow.events.addListener(myAnim, "frame", function() {
+		// get elements
+		ammo = document.getElementById(ammoId);
+		target = document.getElementById(targetId);
+
+		if (ammo) {
+			windowDimensions = getWindowDimensions();
+
+			// height
+			var yStart = ammo.offsetTop;
+			var yStop = 200;
+			var yChange = yStop - yStart;
+
+			var targetY = target.offsetTop;
+			var targetHeight = target.height;
+
+			// width
+			var xStart = ammo.offsetLeft;
+			var xStop = 2000;
+			var xChange = xStop - xStart;
+
+			var targetX = target.offsetLeft;
+			var targetWidth = target.width;
+
+			var x = Math.round(xStart + (xChange * this.value));
+			var y = Math.round(yStart + (yChange * this.value));
+			var x2 = x + ammoGlow.width();
+			var y2 = y + ammoGlow.height();
+			padding = 10;
+
+			xOverlap = (x2 > (targetX + padding)) || (x < (targetX + targetWidth - padding));
+			yOverlap = (y2 > (targetY + padding)) || (y < (targetY + targetHeight - padding));
+
+			ammoGlow.css("position", "absolute");
+			ammoGlow.css("top", y + "px");
+			ammoGlow.css("left", x + "px");
+
+			// HIT TARGET?
+			if (xOverlap && yOverlap) {
+				var hitEvent = glow.events.fire(targetPlayer, 'hit', {
+					damage: 5,
+					ammoId: ammoId
+				});
+
+				if (ammoGlow.css("opacity") > 0) {
+					ammoGlow.css("opacity", ammoGlow.css("opacity") - .05);
+				} else {
+					removeAmmo(ammoGlow, targetPlayer);
+				}
+			}
+			
+			// OFF SCREEN?
+			if (
+				(x2 < 0) ||
+				(x > windowDimensions.x) ||
+				(y2 < 0) ||
+				(y > windowDimensions.y)
+			) {
+				removeAmmo(ammoGlow, targetPlayer);
+			}
+		}
+	});
+	myAnim.start();
+}
+
+function removeAmmo(ammo, targetPlayer) {
+	ammo.remove();
+}
+
+function Player(glowOb) {
+	this.hitIds = []
+	this.asGlow = glowOb;
+	
+	this.hitCount = function() {
+		return this.hitIds.length;
+	}
+
+	this.hit = function(ammoId, damage) {
+		// not been hit by this ammo before
+		if (!this.hitIds.contains(ammoId)) {
+			this.hitIds[this.hitCount()] = ammoId;
+			this.asGlow.get("> div").prepend(ammoId + " = " + damage + " dmg<br>");
+			//player.hurt(damage);
+		  	//if (player.isDead) {
+		  	//  player.painfulDeath();
+		  	//}
+		}
+	}
+}
+
+glow.ready(function() {
+
+	glow.dom.get(".ammo-case li").each(function(i) {
+		glow.dom.get(this).attr("id", "ammo" + (i+1));
+	});
+
+	var danPlayer = new Player(glow.dom.get("#dan"));
+   	attack(glow.dom.get("#ammo-case").children(), "dan", danPlayer);
+});
+
+</script>
+
+</head>
+<body>
+
+<ul class="ammo-case" id="ammo-case">
+	<li>ONE</li>
+	<li>TWO</li>
+	<li>THREE</li>
+</ul>
+
+<div id="dan" class="player">
+	<h3>Target Player</h3>
+	<div></div>
+</div>
+
+</body>
